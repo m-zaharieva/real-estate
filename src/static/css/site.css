@@ -164,3 +164,10 @@ footer {
     color: white;
     padding: 0.7em 1em;
 }
+
+.name-preview {
+    color: #7193dd;
+    font-size: 16px;
+    padding-top: 15px;
+    padding-left: 20px;
+}
