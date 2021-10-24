@@ -16,4 +16,14 @@ exports.auth = (req, res, next) => {
         .catch(error => {
             console.log(error);
         });
-}
+};
+
+exports.isAuth = (req, res, next) => {
+    let user = req.user;
+    if(user) {
+        req.isAuth = true;
+    } else {
+        req.isAuth = false;
+    }
+    next();
+};
