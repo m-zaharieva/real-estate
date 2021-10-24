@@ -5,6 +5,7 @@ const path = require('path');
 
 // Local Modules
 const config = require('./config/config.json')[process.env.NODE_ENV];
+const router = require('./routes.js');
 
 
 // Init ExporessJS
@@ -13,6 +14,8 @@ const app = express();
 initHandlebars(app);
 // Static files 
 app.use(express.static(path.resolve(__dirname, './static')));
+// Routes
+app.use(router);
 
 
 
