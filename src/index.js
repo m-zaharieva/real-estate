@@ -10,6 +10,8 @@ const router = require('./routes.js');
 
 // Init ExporessJS
 const app = express();
+// Parse form data
+app.use(express.urlencoded({extended: true}));
 // Init handlebars
 initHandlebars(app);
 // Static files 
