@@ -26,7 +26,7 @@ const housingSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    availablePeaces: {
+    availablePieces: {
         type: Number,
         required: true,
     },
