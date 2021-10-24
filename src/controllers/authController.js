@@ -6,11 +6,11 @@ const { TOKEN_CONNECTION_NAME } = require('./../constants.js');
 
 
 
-router.get('/register', (req, res) => {
+const registerPage = (req, res) => {
     res.render('auth/register');
-});
+};
 
-router.post('/register', (req, res) => {
+const registerUser = (req, res) => {
     let { name, username, password, repeatPassword } = req.body;
 
     if (password !== repeatPassword) {
@@ -33,13 +33,13 @@ router.post('/register', (req, res) => {
             res.locals.error = errors;
             return res.status(400).render('auth/register');
         });
-});
+};
 
-router.get('/login', (req, res) => {
+const loginPage = (req, res) => {
     res.render('auth/login');
-});
+};
 
-router.post('/login', (req, res) => {
+const loginUser = (req, res) => {
     let { username, password } = req.body;
 
     authService.login(username, password)
@@ -56,11 +56,19 @@ router.post('/login', (req, res) => {
             res.locals.error = ['Username or password don\'t match!']
             res.status(400).render('auth/login');
         });
-});
+};
 
-router.get('/logout', (req, res) => {
+const logoutUser = (req, res) => {
     res.clearCookie(TOKEN_CONNECTION_NAME);
     res.redirect('/');
-})
+};
+
+
+
+router.get('/register', registerPage);
+router.post('/register', registerUser);
+router.get('/login', loginPage);
+router.post('/login', loginUser);
+router.get('/logout', logoutUser);
 
 module.exports = router;
