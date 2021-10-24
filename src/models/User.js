@@ -6,14 +6,18 @@ const userSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
+        validate: [/^[A-Z][a-z]+ [A-Z][a-z]+$/, 'Name should be in the following format "Firstname Lastname"!'],
     },
     username: {
         type: String,
         required: true,
+        unique: true,
+        minlength: 5,
     },
     password: {
         type: String,
         required: true,
+        minlength: 4, 
     }
 });
 
