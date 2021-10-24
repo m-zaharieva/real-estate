@@ -12,6 +12,7 @@ const app = express();
 // Init handlebars
 initHandlebars(app);
 // Static files 
+app.use(express.static(path.resolve(__dirname, './static')));
 
 
 
