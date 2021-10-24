@@ -33,7 +33,8 @@ router.get('/:houseId', (req, res) => {
     housingServices.getOne(houseId)
     .then(house => {
             let isOwner = req.user?._id == house.ownerId;
-            let isRented = house.rented.some(x => x._id == [req.user?._id]);
+            let isRented = house.rented.some(x => x._id == req.user?._id);
+            house.rented= house.rented.map(user => user = user.name).join(', ');
             res.render('housing/details', { ...house, isAuth, isOwner, isRented });
         });
 });
@@ -67,6 +68,16 @@ router.get('/:houseId/delete', (req, res) => {
             console.log(err);
         });
 });
+
+router.get('/:houseId/rent', (req, res) => {
+    let houseId = req.params.houseId;
+    let user = req.user;
+    housingServices.rent(houseId, user)
+        .then(house => {
+            res.redirect(`/housing/${houseId}`);
+        });
+
+})
 
 
 
