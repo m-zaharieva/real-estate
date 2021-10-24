@@ -17,6 +17,7 @@ initHandlebars(app);
 // Static files 
 app.use(express.static(path.resolve(__dirname, './static')));
 // Routes
+app.use(auth);
 app.use(router);
 
 
