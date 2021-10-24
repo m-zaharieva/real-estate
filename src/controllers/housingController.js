@@ -11,7 +11,11 @@ router.post('/create', (req, res) => {
     let ownerId = req.user;
     housingServices.create(housing, ownerId)
         .then(home => {
-            console.log(home);
+            if (home) {
+
+                // TODO: redirect to the 'housing for rent' page;
+                res.redirect('/');
+            }
         });
 })
 

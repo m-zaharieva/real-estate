@@ -1,7 +1,12 @@
 const router = require('express').Router();
+const homeServices = require('./../services/homeServices.js');
 
 router.get('/', (req, res) => {
-    res.render('home');
+    homeServices.allHousings()
+        .then(housings => {
+            console.log(housings)
+            res.render('home', {housings});
+        })
 })
 
 module.exports = router;
