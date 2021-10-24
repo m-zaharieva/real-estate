@@ -6,11 +6,11 @@ const { SECRET } = require('./../constants.js');
 
 
 
-exports.register = (name, username, password) => {
-    return User.create({name, username, password});  
+const register = (name, username, password) => {
+    return User.create({ name, username, password });
 };
 
-exports.login = (username, password) => {
+const login = (username, password) => {
     return findOne(username)
         .then(user => {
             let isValid = bcrypt.compare(password, user.password);
@@ -27,7 +27,7 @@ exports.login = (username, password) => {
         });
 }
 
-exports.createToken = (user) => {
+const createToken = (user) => {
     let payload = {
         _id: user._id,
         username: user.username,
@@ -40,7 +40,16 @@ exports.createToken = (user) => {
 };
 
 const findOne = (username) => {
-    return User.findOne({username}).lean();
+    return User.findOne({ username }).lean();
 }
 
+
+let authServices = {
+    register,
+    login,
+    createToken,
+    findOne,
+};
+
+module.exports = authServices;
 

@@ -7,8 +7,8 @@ const cookieParser = require('cookie-parser');
 // Local Modules
 const config = require('./config/config.json')[process.env.NODE_ENV];
 const router = require('./routes.js');
-const { errorHandler } = require('./middlewares/errorHandlingMiddleware.js');
-const { auth } = require('./middlewares/authMiddleware.js');
+const errorHandlingMiddleware = require('./middlewares/errorHandlingMiddleware.js');
+const authMiddleware = require('./middlewares/authMiddleware.js');
 
 
 // Init ExporessJS
@@ -22,10 +22,10 @@ initHandlebars(app);
 // Static files 
 app.use(express.static(path.resolve(__dirname, './static')));
 // Routes
-app.use(auth);
+app.use(authMiddleware.auth);
 app.use(router);
 // Global Error Handler
-app.use(errorHandler);
+app.use(errorHandlingMiddleware.errorHandler);
 
 
 

@@ -2,13 +2,13 @@ const router = require('express').Router();
 
 const homeController = require('./controllers/homeController.js');
 const authController = require('./controllers/authController.js');
-const housingController = require('./controllers/housingController.js');
-const { isAuth } = require('./middlewares/authMiddleware.js');
+const estateController = require('./controllers/estateController.js');
+const authMiddleware = require('./middlewares/authMiddleware.js');
 
 
 router.use(homeController);
 router.use('/auth', authController);
-router.use('/housing', isAuth, housingController);
+router.use('/housing', authMiddleware.isAuth, estateController);
 
 
 

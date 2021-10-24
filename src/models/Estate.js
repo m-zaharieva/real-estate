@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const housingSchema = new mongoose.Schema({
+const estateSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
@@ -42,6 +42,6 @@ const housingSchema = new mongoose.Schema({
     }
 });
 
-const Housing = mongoose.model('Housing', housingSchema);
+const Estate = mongoose.model('Estate', estateSchema);
 
-module.exports = Housing;
+module.exports = Estate;

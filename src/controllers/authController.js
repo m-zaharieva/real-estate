@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const validator = require('validator');
 
-const authService = require('./../services/authServices.js');
+const authServices = require('./../services/authServices.js');
 const { TOKEN_CONNECTION_NAME } = require('./../constants.js');
 
 
@@ -18,9 +18,9 @@ const registerUser = (req, res) => {
         return res.status(400).render('register');
     }
 
-    authService.register(name, username, password)
+    authServices.register(name, username, password)
         .then(user => {
-            return authService.createToken(user);
+            return authServices.createToken(user);
         })
         .then(token => {
             res.cookie(TOKEN_CONNECTION_NAME, token, {
@@ -42,9 +42,9 @@ const loginPage = (req, res) => {
 const loginUser = (req, res) => {
     let { username, password } = req.body;
 
-    authService.login(username, password)
+    authServices.login(username, password)
         .then(user => {
-            return authService.createToken(user)
+            return authServices.createToken(user)
         })
         .then(token => {
             res.cookie(TOKEN_CONNECTION_NAME, token, {

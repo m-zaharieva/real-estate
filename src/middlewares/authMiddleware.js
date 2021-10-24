@@ -1,7 +1,7 @@
 const { TOKEN_CONNECTION_NAME, SECRET } = require('./../constants.js');
 const { jwtVerify } = require('./../utils/jwtSign.js');
 
-exports.auth = (req, res, next) => {
+const auth = (req, res, next) => {
     let token = req.cookies[TOKEN_CONNECTION_NAME];
     if (!token) {
         return next();
@@ -18,7 +18,7 @@ exports.auth = (req, res, next) => {
         });
 };
 
-exports.isAuth = (req, res, next) => {
+const isAuth = (req, res, next) => {
     let user = req.user;
     if(user) {
         req.isAuth = true;
@@ -27,3 +27,10 @@ exports.isAuth = (req, res, next) => {
     }
     next();
 };
+
+let authMiddleware = {
+    auth,
+    isAuth,
+}
+
+module.exports = authMiddleware;

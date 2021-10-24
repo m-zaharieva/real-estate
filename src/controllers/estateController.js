@@ -1,6 +1,6 @@
 const router = require('express').Router();
 
-const housingServices = require('./../services/housingServices.js')
+const estateServices = require('./../services/estateServices.js')
 
 
 const createPage = (req, res) => {
@@ -10,7 +10,7 @@ const createPage = (req, res) => {
 const createHome = (req, res) => {
     let housing = req.body;
     let ownerId = req.user;
-    housingServices.create(housing, ownerId)
+    estateServices.create(housing, ownerId)
         .then(home => {
             if (home) {
 
@@ -21,7 +21,7 @@ const createHome = (req, res) => {
 };
 
 const forRentPage = (req, res) => {
-    housingServices.getAll()
+    estateServices.getAll()
         .then(houses => {
             res.render('housing/forRent', {houses});
         });
@@ -30,7 +30,7 @@ const forRentPage = (req, res) => {
 const detailsPage = (req, res) => {
     let houseId = req.params.houseId;
     let isAuth = req.isAuth;
-    housingServices.getOne(houseId)
+    estateServices.getOne(houseId)
     .then(house => {
             let isOwner = req.user?._id == house.ownerId;
             let isRented = house.rented.some(x => x._id == req.user?._id);
@@ -41,7 +41,7 @@ const detailsPage = (req, res) => {
 
 const editPage = (req, res) => {
     let houseId = req.params.houseId;
-    housingServices.getOne(houseId)
+    estateServices.getOne(houseId)
         .then(house => {
             res.render('housing/edit', {...house});
         });
@@ -50,7 +50,7 @@ const editPage = (req, res) => {
 const editHome = (req, res) => {
     let house = req.body;
     let houseId = req.params.houseId;
-    housingServices.update(houseId, house)
+    estateServices.update(houseId, house)
      .then(updatedHouse => {
          updatedHouse.save();
          res.redirect(`/housing/${houseId}`);
@@ -59,7 +59,7 @@ const editHome = (req, res) => {
 
  const deleteHome = (req, res) => {
     let houseId = req.params.houseId;
-    housingServices.deleteOne(houseId)
+    estateServices.deleteOne(houseId)
         .then(house => {
             console.log(house);
             res.redirect('/housing/forRent');
@@ -72,7 +72,7 @@ const editHome = (req, res) => {
 const rentHome = (req, res) => {
     let houseId = req.params.houseId;
     let user = req.user;
-    housingServices.rent(houseId, user)
+    estateServices.rent(houseId, user)
         .then(house => {
             res.redirect(`/housing/${houseId}`);
         });
