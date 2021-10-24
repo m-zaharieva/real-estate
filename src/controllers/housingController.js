@@ -38,6 +38,13 @@ router.get('/:houseId', (req, res) => {
         });
 });
 
+router.get('/:houseId/edit', (req, res) => {
+    let houseId = req.params.houseId;
+    housingServices.getOne(houseId)
+        .then(house => {
+            res.render('housing/edit', {...house});
+        });
+});
 
 
 
