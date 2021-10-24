@@ -20,3 +20,7 @@ exports.getAll = () => {
 exports.update = (houseId, house) => {
     return Housing.findByIdAndUpdate({_id:houseId}, {...house});
 }
+
+exports.deleteOne = (houseId) => {
+    return Housing.findByIdAndDelete({_id: houseId});
+}

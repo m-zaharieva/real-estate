@@ -51,10 +51,21 @@ router.post('/:houseId/edit', (req, res) => {
    let houseId = req.params.houseId;
    housingServices.update(houseId, house)
     .then(updatedHouse => {
-        console.log(updatedHouse);
         updatedHouse.save();
         res.redirect(`/housing/${houseId}`);
     }) 
+});
+
+router.get('/:houseId/delete', (req, res) => {
+    let houseId = req.params.houseId;
+    housingServices.deleteOne(houseId)
+        .then(house => {
+            console.log(house);
+            res.redirect('/housing/forRent');
+        })
+        .catch(err => {
+            console.log(err);
+        });
 });
 
 
