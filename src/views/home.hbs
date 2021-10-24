@@ -17,13 +17,7 @@
         {{#if housings}}
 
             {{#each housings}}
-
-                <div class="card-home">
-                    <h2>{{this.name}}</h2>
-                    <div class="cta-container"><a href="/housing/{{this._id}}" class="details-link">Details</a></div>
-                    <div class="card_image"><img src="/images/{{this.homeImage}}"></div>
-                </div>
-
+                {{> housing}}
             {{/each}}
         
         {{else}}
@@ -31,7 +25,7 @@
             <div class="no-data-container">
                 <p class="no-data">There are no housing offers found...</p>
             </div>
-            
+
         {{/if}}
         </div>
     </section>
