@@ -4,8 +4,9 @@ const homeServices = require('./../services/homeServices.js');
 router.get('/', (req, res) => {
     homeServices.allHousings()
         .then(housings => {
-            console.log(housings)
-            res.render('home', {housings});
+            let topHouses = housings.slice(-3);
+            console.log(topHouses);
+            res.render('home', {topHouses});
         })
 })
 
