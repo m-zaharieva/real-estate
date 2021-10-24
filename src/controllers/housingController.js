@@ -3,11 +3,11 @@ const router = require('express').Router();
 const housingServices = require('./../services/housingServices.js')
 
 
-router.get('/create', (req, res) => {
+const createPage = (req, res) => {
     res.render('housing/create');
-});
+};
 
-router.post('/create', (req, res) => {
+const createHome = (req, res) => {
     let housing = req.body;
     let ownerId = req.user;
     housingServices.create(housing, ownerId)
@@ -18,16 +18,16 @@ router.post('/create', (req, res) => {
                 res.redirect('/');
             }
         });
-});
+};
 
-router.get('/forRent', (req, res) => {
+const forRentPage = (req, res) => {
     housingServices.getAll()
         .then(houses => {
             res.render('housing/forRent', {houses});
         });
- });
+ };
 
-router.get('/:houseId', (req, res) => {
+const detailsPage = (req, res) => {
     let houseId = req.params.houseId;
     let isAuth = req.isAuth;
     housingServices.getOne(houseId)
@@ -37,27 +37,27 @@ router.get('/:houseId', (req, res) => {
             house.rented= house.rented.map(user => user = user.name).join(', ');
             res.render('housing/details', { ...house, isAuth, isOwner, isRented });
         });
-});
+}
 
-router.get('/:houseId/edit', (req, res) => {
+const editPage = (req, res) => {
     let houseId = req.params.houseId;
     housingServices.getOne(houseId)
         .then(house => {
             res.render('housing/edit', {...house});
         });
-});
+};
 
-router.post('/:houseId/edit', (req, res) => {
-   let house = req.body;
-   let houseId = req.params.houseId;
-   housingServices.update(houseId, house)
-    .then(updatedHouse => {
-        updatedHouse.save();
-        res.redirect(`/housing/${houseId}`);
-    }) 
-});
+const editHome = (req, res) => {
+    let house = req.body;
+    let houseId = req.params.houseId;
+    housingServices.update(houseId, house)
+     .then(updatedHouse => {
+         updatedHouse.save();
+         res.redirect(`/housing/${houseId}`);
+     });
+ };
 
-router.get('/:houseId/delete', (req, res) => {
+ const deleteHome = (req, res) => {
     let houseId = req.params.houseId;
     housingServices.deleteOne(houseId)
         .then(house => {
@@ -67,9 +67,9 @@ router.get('/:houseId/delete', (req, res) => {
         .catch(err => {
             console.log(err);
         });
-});
+};
 
-router.get('/:houseId/rent', (req, res) => {
+const rentHome = (req, res) => {
     let houseId = req.params.houseId;
     let user = req.user;
     housingServices.rent(houseId, user)
@@ -77,11 +77,17 @@ router.get('/:houseId/rent', (req, res) => {
             res.redirect(`/housing/${houseId}`);
         });
 
-})
+};
 
 
-
-
+router.get('/create', createPage);
+router.post('/create', createHome);
+router.get('/forRent', forRentPage);
+router.get('/:houseId', detailsPage);
+router.get('/:houseId/edit', editPage);
+router.post('/:houseId/edit', editHome);
+router.get('/:houseId/delete', deleteHome);
+router.get('/:houseId/rent', rentHome);
 
 
 module.exports = router;
