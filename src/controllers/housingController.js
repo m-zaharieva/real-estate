@@ -46,6 +46,17 @@ router.get('/:houseId/edit', (req, res) => {
         });
 });
 
+router.post('/:houseId/edit', (req, res) => {
+   let house = req.body;
+   let houseId = req.params.houseId;
+   housingServices.update(houseId, house)
+    .then(updatedHouse => {
+        console.log(updatedHouse);
+        updatedHouse.save();
+        res.redirect(`/housing/${houseId}`);
+    }) 
+});
+
 
 
 

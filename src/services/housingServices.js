@@ -16,3 +16,7 @@ exports.getOne = (houseId) => {
 exports.getAll = () => {
     return Housing.find({}).populate().lean();
 }
+
+exports.update = (houseId, house) => {
+    return Housing.findByIdAndUpdate({_id:houseId}, {...house});
+}
