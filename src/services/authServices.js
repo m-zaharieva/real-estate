@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt');
 
 const User = require('./../models/User.js');
 const { jwtSign } = require('./../utils/jwtSign.js');
-const { SECRET } = require('./../constants.js');
+const { SECRET, TOKEN_CONNECTION_NAME } = require('./../constants.js');
 
 
 
@@ -41,6 +41,12 @@ const createToken = (user) => {
         });
 };
 
+const setCookie = (res, token) => {
+    res.cookie(TOKEN_CONNECTION_NAME, token, {
+        httpOnly: true,
+    });
+}
+
 const findOne = (username) => {
     return User.findOne({ username }).lean();
 }
@@ -51,6 +57,7 @@ let authServices = {
     login,
     createToken,
     findOne,
+    setCookie,
 };
 
 module.exports = authServices;

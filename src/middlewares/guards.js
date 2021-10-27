@@ -1,9 +1,31 @@
-const isAuth = (req, res, next) => {
+const isUser = (req, res, next) => {
     let user = req.user;
-    if(user) {
-        req.isAuth = true;
+    if (user) {
+        req.isUser = true;
+        next();
     } else {
-        req.isAuth = false;
+        req.isUser = false;
+        res.redirect('/');
     }
-    next();
 };
+
+
+const isGuest = (req, res, next) => {
+    let user = req.user;
+    if (!user) {
+        req.isGuest = true,
+        next();
+    } else {
+        req.isGuest = false;
+        res.redirect('/');
+    }
+}
+
+
+
+let guards = {
+    isUser,
+    isGuest,
+}
+
+module.exports = guards;

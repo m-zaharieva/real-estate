@@ -15,7 +15,7 @@ const app = express();
 // Parse cookie data to an object
 app.use(cookieParser());
 // Parse form data
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 // Init handlebars
 initHandlebars(app);
 // Static files 
@@ -31,6 +31,8 @@ initDatabase(config.DB_CONNECTION_STRING)
     .then(() => {
         app.listen(config.PORT, () => {
             console.log(`App is running on http://localhost:${config.PORT} ...`);
+        });
+    })
+    .catch(error => {
+        app.response.write('Database could not connect!');
     });
-
-});

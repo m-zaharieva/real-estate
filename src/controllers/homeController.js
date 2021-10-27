@@ -6,7 +6,6 @@ const estateServices = require('./../services/estateServices.js');
 const homePage = (req, res) => {
     estateServices.getTopHouses()
         .then(housings => {
-            console.log(housings)
             res.render('home', {housings});
         })
         .catch(error => {

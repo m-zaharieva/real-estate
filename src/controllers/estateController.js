@@ -1,6 +1,7 @@
 const router = require('express').Router();
 
 const estateServices = require('./../services/estateServices.js')
+const guards = require('./../middlewares/guards.js');
 
 
 
@@ -36,13 +37,13 @@ const forRentPage = (req, res, next) => {
 
 const detailsPage = (req, res, next) => {
     let houseId = req.params.houseId;
-    let isAuth = req.isAuth;
+    let isUser = req.isUser;
     estateServices.getOne(houseId)
         .then(house => {
             let isOwner = req.user?._id == house.ownerId;
             let isRented = house.rented.some(x => x._id == req.user?._id);
             house.rented = house.rented.map(user => user = user.name).join(', ');
-            res.render('housing/details', { ...house, isAuth, isOwner, isRented });
+            res.render('housing/details', { ...house, isUser, isOwner, isRented });
         })
         .catch(error => {
             next(error);
@@ -99,13 +100,13 @@ const rentHome = (req, res) => {
 
 
 
-router.get('/create', createPage);
-router.post('/create', createHome);
+router.get('/create', guards.isUser, createPage);
+router.post('/create', guards.isUser, createHome);
 router.get('/forRent', forRentPage);
-router.get('/:houseId', detailsPage);
-router.get('/:houseId/edit', editPage);
-router.post('/:houseId/edit', editHome);
-router.get('/:houseId/delete', deleteHome);
-router.get('/:houseId/rent', rentHome);
+router.get('/:houseId', guards.isUser, detailsPage);
+router.get('/:houseId/edit', guards.isUser, editPage);
+router.post('/:houseId/edit', guards.isUser, editHome);
+router.get('/:houseId/delete', guards.isUser, deleteHome);
+router.get('/:houseId/rent', guards.isUser, rentHome);
 
 module.exports = router;
