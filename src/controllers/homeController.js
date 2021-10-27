@@ -4,10 +4,14 @@ const estateServices = require('./../services/estateServices.js');
 
 
 const homePage = (req, res) => {
-    estateServices.getAll()
+    estateServices.getTopHouses()
         .then(housings => {
-            let topHouses = housings.slice(-3);
-            res.render('home', {topHouses});
+            console.log(housings)
+            res.render('home', {housings});
+        })
+        .catch(error => {
+            res.locals.error = [error.message];
+            res.status(400).render('home');
         });
 };
 

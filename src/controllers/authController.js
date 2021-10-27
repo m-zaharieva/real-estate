@@ -1,5 +1,4 @@
 const router = require('express').Router();
-const validator = require('validator');
 
 const authServices = require('./../services/authServices.js');
 const { TOKEN_CONNECTION_NAME } = require('./../constants.js');
@@ -15,7 +14,7 @@ const registerUser = (req, res) => {
 
     if (password !== repeatPassword) {
         res.locals.error = ['Both passwords should be equal!'];
-        return res.status(400).render('register');
+        return res.status(400).render('auth/register');
     }
 
     authServices.register(name, username, password)
@@ -44,6 +43,9 @@ const loginUser = (req, res) => {
 
     authServices.login(username, password)
         .then(user => {
+            if(!user) {
+                throw new Error (['Incorect username or password!']);
+            }
             return authServices.createToken(user)
         })
         .then(token => {
@@ -53,8 +55,8 @@ const loginUser = (req, res) => {
             res.redirect('/');
         })
         .catch(error => {
-            res.locals.error = ['Username or password don\'t match!']
-            res.status(400).render('auth/login');
+            res.locals.error = [error.message];
+            return res.status(400).render('auth/login');
         });
 };
 

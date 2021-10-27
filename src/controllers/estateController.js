@@ -3,6 +3,7 @@ const router = require('express').Router();
 const estateServices = require('./../services/estateServices.js')
 
 
+
 const createPage = (req, res) => {
     res.render('housing/create');
 };
@@ -13,29 +14,38 @@ const createHome = (req, res) => {
     estateServices.create(housing, ownerId)
         .then(home => {
             if (home) {
-
-                // TODO: redirect to the 'housing for rent' page;
-                res.redirect('/');
+                res.redirect('/housing/forRent');
             }
+        })
+        .catch(error => {
+            let errors = Object.keys(error.errors).map(v => error.errors[v].message);
+            res.locals.error = errors;
+            res.status(400).render('housing/create');
         });
 };
 
-const forRentPage = (req, res) => {
+const forRentPage = (req, res, next) => {
     estateServices.getAll()
         .then(houses => {
-            res.render('housing/forRent', {houses});
+            res.render('housing/forRent', { houses });
+        })
+        .catch(error => {
+            next(error);
         });
- };
+};
 
-const detailsPage = (req, res) => {
+const detailsPage = (req, res, next) => {
     let houseId = req.params.houseId;
     let isAuth = req.isAuth;
     estateServices.getOne(houseId)
-    .then(house => {
+        .then(house => {
             let isOwner = req.user?._id == house.ownerId;
             let isRented = house.rented.some(x => x._id == req.user?._id);
-            house.rented= house.rented.map(user => user = user.name).join(', ');
+            house.rented = house.rented.map(user => user = user.name).join(', ');
             res.render('housing/details', { ...house, isAuth, isOwner, isRented });
+        })
+        .catch(error => {
+            next(error);
         });
 }
 
@@ -43,7 +53,10 @@ const editPage = (req, res) => {
     let houseId = req.params.houseId;
     estateServices.getOne(houseId)
         .then(house => {
-            res.render('housing/edit', {...house});
+            res.render('housing/edit', { ...house });
+        })
+        .catch(error => {
+            console.log('Edit Page Error');
         });
 };
 
@@ -51,13 +64,18 @@ const editHome = (req, res) => {
     let house = req.body;
     let houseId = req.params.houseId;
     estateServices.update(houseId, house)
-     .then(updatedHouse => {
-         updatedHouse.save();
-         res.redirect(`/housing/${houseId}`);
-     });
- };
+        .then(updatedHouse => {
+            updatedHouse.save();
+            res.redirect(`/housing/${houseId}`);
+        })
+        .catch(error => {
+            let errors = Object.keys(error.errors).map(v => error.errors[v].message);
+            res.locals.error = errors;
+            res.status(400).render(`/housing/${houseId}`);
+        });
+};
 
- const deleteHome = (req, res) => {
+const deleteHome = (req, res) => {
     let houseId = req.params.houseId;
     estateServices.deleteOne(houseId)
         .then(house => {
@@ -65,7 +83,7 @@ const editHome = (req, res) => {
             res.redirect('/housing/forRent');
         })
         .catch(err => {
-            console.log(err);
+            console.log('Delete Home error');
         });
 };
 
@@ -80,6 +98,7 @@ const rentHome = (req, res) => {
 };
 
 
+
 router.get('/create', createPage);
 router.post('/create', createHome);
 router.get('/forRent', forRentPage);
@@ -88,6 +107,5 @@ router.get('/:houseId/edit', editPage);
 router.post('/:houseId/edit', editHome);
 router.get('/:houseId/delete', deleteHome);
 router.get('/:houseId/rent', rentHome);
-
 
 module.exports = router;
