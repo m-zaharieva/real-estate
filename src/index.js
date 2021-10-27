@@ -7,7 +7,6 @@ const cookieParser = require('cookie-parser');
 // Local Modules
 const config = require('./config/config.json')[process.env.NODE_ENV];
 const router = require('./routes.js');
-const errorHandlingMiddleware = require('./middlewares/errorHandlingMiddleware.js');
 const authMiddleware = require('./middlewares/authMiddleware.js');
 
 
@@ -21,12 +20,10 @@ app.use(express.urlencoded({extended: true}));
 initHandlebars(app);
 // Static files 
 app.use(express.static(path.resolve(__dirname, './static')));
-// Routes
+// Verrify user's token and save user data to the response locals
 app.use(authMiddleware.auth);
+// Routes
 app.use(router);
-// Global Error Handler
-app.use(errorHandlingMiddleware.errorHandler);
-
 
 
 // Init Database and app port listening
