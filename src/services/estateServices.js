@@ -2,12 +2,13 @@ const Estate = require('../models/Estate.js');
 
 
 const create = (housing, ownerId) => {
-
     let { name, type, year, city, homeImage, description, availablePieces } = housing;
-
     return Estate.create({ name, type, year, city, homeImage, description, availablePieces, ownerId });
 };
 
+const getTopHouses = () => {
+    return Estate.find().sort({createdAt:-1}).limit(3).lean();
+}
 
 const getOne = (houseId) => {
     return Estate.findById(houseId).populate('rented').lean();
@@ -35,8 +36,10 @@ const rent = (houseId, user) => {
         });
 };
 
+
 let estateServices = {
     create,
+    getTopHouses,
     getOne,
     getAll,
     update,

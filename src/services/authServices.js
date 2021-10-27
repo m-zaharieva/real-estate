@@ -17,7 +17,6 @@ const login = (username, password) => {
             return Promise.all([isValid, user]);
         })
         .then(([isValid, user]) => {
-            console.log(user)
             if (isValid) {
                 return user;
             }
@@ -36,6 +35,9 @@ const createToken = (user) => {
     return jwtSign(payload, SECRET)
         .then(token => {
             return token;
+        })
+        .catch(error => {
+            console.log(error.message)
         });
 };
 
