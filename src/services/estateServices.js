@@ -7,7 +7,7 @@ const create = (housing, ownerId) => {
 };
 
 const getTopHouses = () => {
-    return Estate.find().sort({createdAt:-1}).limit(3).lean();
+    return Estate.find().sort({ createdAt: -1 }).limit(3).lean();
 }
 
 const getOne = (houseId) => {
@@ -19,7 +19,9 @@ const getAll = () => {
 };
 
 const update = (houseId, house) => {
+    // return Estate.findByIdAndUpdate({ _id: houseId }, { $set: { ...house } }, { runValidators: true });
     return Estate.findByIdAndUpdate({ _id: houseId }, { ...house });
+    //TODO Run validation on update and catch them
 };
 
 const deleteOne = (houseId) => {
